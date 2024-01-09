@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 페이지</title>
+
+    <style>
+        body {
+            font-family: 'Nanum Gothic', sans-serif;
+            text-align: center;
+            margin: 20vh auto;
+        }
+
+        form {
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h2>관리자 인증</h2>
+    <form id="loginForm">
+        <input type="text" id="username" placeholder="Input Your ID" required>
+        <br>
+        <input type="password" id="password" placeholder="Input Your P/W" required>
+        <br>
+        <button type="button" onclick="login()">로그인</button>
+    </form>
+
+    <script>
+        var loginAttempts = 0;
+        var lockedUntil = null;
+
+        function login() {
+            // 계정이 잠겨있는 경우
+            if (lockedUntil && Date.now() < lockedUntil) {
+                alert("계정이 잠겨 있습니다. 잠금 해제까지 기다려주세요.");
+                return;
+            }
+
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+
+            // 간단한 로그인 체크 - 실제로는 서버와의 통신 및 안전한 인증 과정이 필요합니다.
+            if (username === "Admin" && password === "Password") {
+                alert("로그인 성공!");
+                loginAttempts = 0;
+
+                // 로그인 성공 시 다른 사이트로 이동
+                window.location.href = "https://example.com";  // 이동하고자 하는 사이트 URL로 변경
+            } else {
+                loginAttempts++;
+
+                // 비밀번호 3회 이상 틀릴 경우 계정 잠금
+                if (loginAttempts >= 3) {
+                    var lockDuration = 30 * 60 * 1000; // 30분
+                    lockedUntil = Date.now() + lockDuration;
+                    alert("비밀번호가 3회 이상 틀렸습니다. 30분간 접속이 제한됩니다.");
+                } else {
+                    alert("아이디 또는 비밀번호가 잘못되었습니다.");
+                }
+            }
+        }
+    </script>
+</body>
+</html>
